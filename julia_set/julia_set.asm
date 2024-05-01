@@ -1,6 +1,6 @@
 	.data
 Header:	.space 56
-Path:	.asciz "C:\\Users\\Adam\\Desktop\\asmProjekty\\juliaset\\example.bmp"
+Path:	.asciz "C:\\Users\\Adam\\Desktop\\asmProjekty\\juliaset\\julia.bmp"
 Error:	.asciz "Error with opening BMP File"
 Error2:	.asciz "Error with writing to BMP File"
 In1:	.asciz "Input real part of c in fixed-point format (eg. 1250 = 1.250):\n"
