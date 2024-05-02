@@ -81,14 +81,14 @@ readbmp:
 #-----Funkcje działające na pikselach------------------------------------
 #------------------------------------------------------------------------
 calc_pixel_val:
-	srai t4, s1, 1
-	sub s8, t1, t4  # s8 = t1 - s1 // 2
-	slli s8, s8, 13
-	div s8, s8, t4 # s8 = Re z
-	srai t4, s2, 1
-	sub s9, t2, t4 # s9 = t2 - s2 // 2
-	slli s9, s9, 13
-	div s9, s9, t4 # s9 = Im z
+	srai t4, s1, 1 # t4 = width / 2 -> wartość "wysunięć" od zera gdyby podziałka była co jeden piksel
+	sub s8, t1, t4  # s8 = t1 - width // 2 -> wartość "wysunięcia" dla aktualnego piksela gdyby podziałka była co jeden piksel
+	slli s8, s8, 13 # przesunięcie do odp. fixed-point i s8 = s8 * 2
+	div s8, s8, t4 # s8 = Re z -> 4/width (podziałka dla układu wsp. od -2 do 2) * wartość punktu dla aktualnego piksela gdyby podziałka była co jeden piksel
+	srai t4, s2, 1 # t4 = height / 2 -> wartość "wysunięć" od zera gdyby podziałka była co jeden piksel
+	sub s9, t2, t4 # s9 = t2 - height // 2 -> wartość "wysunięcia" dla aktualnego piksela gdyby podziałka była co jeden piksel
+	slli s9, s9, 13 # przesunięcie do odp. fixed-point i s8 = s8 * 2
+	div s9, s9, t4 # s8 = Im z -> 4/width (podziałka dla układu wsp. od -2 do 2) * wartość punktu dla aktualnego piksela gdyby podziałka była co jeden piksel
 
 	li t3, 40 # licznik iteracji
 iterate:
@@ -102,8 +102,7 @@ iterate:
 	srai t6, t6, 12 # korekta mnożenia w fixed-point
 	
 	mul s9, s9, s8 # s9 = Re z * Im z
-	srai s9, s9, 12 # korekta mnożenia w fixed-point
-	slli s9, s9, 1 # s9 = 2 * Re z * Im z
+	srai s9, s9, 11 # korekta mnożenia w fixed-point, s9 = 2 * Re z * Im z
 	
 	sub s8, t5, t6 # s8 = Re z ^ 2 - Im z ^ 2
 	
