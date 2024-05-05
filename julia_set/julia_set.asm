@@ -142,8 +142,7 @@ check_row: # sprawdź czy koniec rzędu pikseli
 check_padding: # sprawdź czy potrzebny jest padding
 	li t5, 3
 	mul t6, s1, t5
-	addi t5, t5, 1
-	remu t5, t6, t5
+	and t5, t6, t5
 	beqz t5, increment_row # padding nie potrzebny
 	li t6, 0 # padding potrzebny
 add_padding: # dodaj padding na koniec rzędu
