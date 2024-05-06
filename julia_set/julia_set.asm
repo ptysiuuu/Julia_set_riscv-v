@@ -92,6 +92,8 @@ calc_pixel_val:
 
 	li t3, 40 # licznik iteracji
 iterate:
+	li a0, 0xFF # domyślna wartość bajtu RGB dla piksela nie należącego do fraktala
+
 	li t4, 4
 	slli t4, t4, 12 # przesuń 4 do odpowiedniego formatu fixed-point
 	
@@ -116,27 +118,18 @@ iterate:
 	
 	add t5, t5, t6 # t5 = Re z ^ 2 + Im z ^ 2 = r ^ 2
 	
-	bge t5, t4, not_in_set # if |r| > 2 <-> r ^ 2 > 4
+	bge t5, t4, color_pixel # if |r| > 2 <-> r ^ 2 > 4
 	addi t3, t3, -1 # dekrementacja licznika iteracji
 	bnez t3, iterate # iteration = 40
-in_set: # pokoloruj piksel na czarno 
-	sb zero, (t0)
+	mv a0, zero # piksel należy do fraktala, więc kolorujemy go na czarno
+color_pixel: # pokoloruj piksel na odpowiedni kolor
+	sb a0, (t0)
 	addi t0, t0, 1
-	sb zero, (t0)
+	sb a0, (t0)
 	addi t0, t0, 1
-	sb zero, (t0)
+	sb a0, (t0)
 	addi t0, t0, 1
-	b check_row
-not_in_set: # pokoloruj piksel na biało
-	li t5, 0xFF
-	sb t5, (t0)
-	addi t0, t0, 1
-	sb t5, (t0)
-	addi t0, t0, 1
-	sb t5, (t0)
-	addi t0, t0, 1
-check_row: # sprawdź czy koniec rzędu pikseli
-	addi t1, t1, 1
+	addi t1, t1, 1 # sprawdź czy koniec rzędu pikseli
 	li t3, 40
 	bne t1, s1, calc_pixel_val
 check_padding: # sprawdź czy potrzebny jest padding
